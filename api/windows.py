@@ -15,7 +15,7 @@ def get_process_info():
     logging.debug("Getting process information...")
     for element in data:
         # Finds process name for Adobe applications
-        process_name = element['processName']
+        process_name = element['processNameWin']
         logging.debug("Loading Process names for Windows...")
         for process in psutil.process_iter():
             # Finds pid through iteration

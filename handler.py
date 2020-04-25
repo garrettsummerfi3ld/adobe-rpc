@@ -35,19 +35,19 @@ def get_rpc_update():
         except ImportError:
             logging.error(
                 "Required dependency is not found! Did install all dependencies? Check with the README")
-            sys.exit(1)
+            raise SystemExit(1)
         except TypeError:
             logging.error("No Adobe Applications running!")
 
     # Unsupported operating systems for the time being
     elif sys.platform in ['Mac', 'darwin', 'os2', 'os2emx']:
         logging.warning("MacOS support is currently not available. Closing...")
-        sys.exit(0)
+        raise SystemExit(1)
 
     else:
         logging.error("Unknown operating system! Exiting...")
         logging.error("If you believe this is an error. Submit a bug report.")
 
-        sys.exit(0)
+        raise SystemExit(0)
 def exception_handler(exception, future):
     logging.exception("Something bad happened. Printing stacktrace...")
