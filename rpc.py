@@ -13,12 +13,11 @@ logging.basicConfig(level=logging.DEBUG, format=('%(asctime)s - %(levelname)s - 
                                                  '%(funcName)s - %(message)s'),
                     datefmt='%d-%m-%y %H:%M:%S')
 
-# Attempts to find Discord
 def connect_loop(retries=0):
+    # Attempts to find Discord
     logging.info("Connecting rich presence...")
-
-    # Retry limit of 10 attempts
     if retries < 10:
+        # Retry limit of 10 attempts
         try:
             logging.info("Conneting to RPC...")
             rich_presence.connect()
@@ -42,10 +41,10 @@ def connect_loop(retries=0):
         raise SystemExit(1)
 
 
-# Updates Discord of current activity
 def update_loop():
-    # Sets startup time for the application
+    # Updates Discord of current activity
     start_time = int(time.time())
+    # Sets startup time for the application
     try:
         while True:
             # Creates rpc_data dictionary to parse data to handle
@@ -65,13 +64,13 @@ def update_loop():
             logging.debug("Raw input into Discord RPC: " + str(rpc_data))
 
             time.sleep(10)
-    # When script has a bad Client ID
     except InvalidID:
+        # When script has a bad Client ID
         logging.error(
             "Unable to connect to Discord! Is your Client ID correct?")
         raise SystemExit(1)
-    # When either Discord or a supported Adobe product is not detected...
     except:
+        # When either Discord or a supported Adobe product is not detected...
         # Clear rpc_data
         rich_presence.clear()
         logging.exception(
@@ -80,8 +79,8 @@ def update_loop():
         time.sleep(1)
         update_loop()
 
-# Main instance
 if __name__ == "__main__":
+    # Main instance
     try:
         logging.info("Started Adobe RPC!")
         connect_loop()
