@@ -1,31 +1,17 @@
-from Quartz import CGWindowListCopyWindowInfo, kCGNullWindowID, kCGWindowListOptionAll
+from AppKit import NSWorkspace
+from Quartz import CGWindowListCopyWindowInfo, kCGWindowListOptionOnScreenOnly, kCGNullWindowID
+import applescript
 import psutil
 import json
 import logging
 
-# Processes title of application from PID
-def get_title(pid):
-    logging.debug("Getting title for the application...")
-
-    def callback(hwnd, hwnds):
-        if win32gui.IsWindowVisible(hwnd) and win32gui.IsWindowEnabled(hwnd):
-            _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
-            if found_pid == pid:
-                hwnds.append(hwnd)
-    hwnds = []
-    win32gui.EnumWindows(callback, hwnds)
-    window_title = win32gui.GetWindowText(hwnds[-1])
-    logging.debug("Title of application: " + window_title)
-    return window_title
-
-
-# Parses metadata for associated applications
 with open('meta.json') as f:
+    # Parses metadata for associated applications
     logging.debug("Loading 'meta.json'")
     data = json.load(f)
 
-# Process information of application
 def get_process_info():
+    # Process information of application
     logging.debug("Getting process information...")
     for element in data:
         # Finds process name for Adobe applications
@@ -39,14 +25,32 @@ def get_process_info():
                             str(process_info))
                 return element
 
-# Status of application
+def get_title(pid):
+    # Processes title of application from PID
+    logging.debug("Getting title for the application...")
+    curr_app = NSWorkspace.sharedWorkspace().frontmostApplication()
+    curr_pid = NSWorkspace.sharedWorkspace().activeApplication()['NSApplicationProcessIdentifier']
+    curr_app_name = curr_app.localizedName()
+    options = kCGWindowListOptionOnScreenOnly
+    windowList = CGWindowListCopyWindowInfo(options, kCGNullWindowID)
+    for window in windowList:
+        pid = window['kCGWindowOwnerPID']
+        windowNumber = window['kCGWindowNumber']
+        ownerName = window['kCGWindowOwnerName']
+        geometry = window['kCGWindowBounds']
+        windowTitle = window.get('kCGWindowName', u'Unknown')
+        if curr_pid == pid:
+            logging.debug("Title of application: " +  windowTitle.encode('ascii','ignore'))
+            return windowTitle
+
 def get_status(app_info, title):
-    # Idle detection
+    # Status of application
     if app_info['largeText'].lower() in title.lower() and app_info['splitBy'] != " - ":
+        # Idle detection
         logging.debug("Returning to Discord that you are detected as idle...")
         return "{}: IDLE".format(app_info['smallText'])
-    # Project detection
     else:
+        # Project detection
         logging.debug("Not idling! Finding project...")
         title_seperated = title.split(app_info['splitBy'])
         if app_info['splitBy'] == " - ":

@@ -1,6 +1,5 @@
 [
 	{
-
 		"processNameWin": "photoshop.exe",
 		"processNameMac": "Adobe Photoshop",
 		"splitBy": " @ ",
@@ -11,7 +10,6 @@
 		"smallText": "Editing"
 	},
 	{
-
 		"processNameWin": "adobe premiere pro.exe",
 		"processNameMac": "Adobe Premiere Pro",
 		"splitBy": " - ",
