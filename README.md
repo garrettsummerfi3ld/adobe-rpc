@@ -1,5 +1,13 @@
 # Adobe Discord Rich Presence
 
+## Notice to this repository
+
+I am not working on this project anymore in favor of a better project in the works here: https://github.com/ryanjokuti/adobeRichPresence
+
+It's under active development, and the code base is simplified.
+
+I can still respond to issues, its just that is not my main focus.
+
 ![alt text][header]
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/719bbef946084e78b20a1c7c63420e86)](https://www.codacy.com/app/imsmokie/adobe-rpc?utm_source=github.com&utm_medium=referral&utm_content=smokes/adobe-rpc&utm_campaign=Badge_Grade)
